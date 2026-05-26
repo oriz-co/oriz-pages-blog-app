@@ -81,13 +81,13 @@ When you open a terminal emulator (such as Windows Terminal or Alacritty), the h
 ```mermaid
 graph TD
     ShellStart["Terminal Launches Shell Process"] --> LoginCheck{"Is it a Login Shell?"}
-    LoginCheck -->|Yes (e.g. SSH, bash -l)| ReadGlobalProfile["Read /etc/profile"]
+    LoginCheck -->|Yes| ReadGlobalProfile["Read /etc/profile"]
     ReadGlobalProfile --> ReadUserProfiles{"Check User Profile Files"}
     ReadUserProfiles -->|Reads first found| BashProfile["~/.bash_profile"]
     ReadUserProfiles -->|Reads first found| BashLogin["~/.bash_login"]
     ReadUserProfiles -->|Reads first found| Profile["~/.profile"]
     
-    LoginCheck -->|No (e.g. New WSL Tab)| ReadGlobalBashrc["Read /etc/bash.bashrc"]
+    LoginCheck -->|No| ReadGlobalBashrc["Read /etc/bash.bashrc"]
     ReadGlobalBashrc --> ReadUserBashrc["Read ~/.bashrc"]
     
     BashProfile --> SourceBashrc["Execute source ~/.bashrc"]
@@ -227,16 +227,16 @@ graph TD
     Client["Client Machine"] -->|Initiates TCP Connection on Port 22| Server["Remote SSH Server"]
     Server -->|Sends Host Key & Cipher Specs| Client
     Client -->|Verifies Host Key against known_hosts| KeyExchange{"Perform Diffie-Hellman Key Exchange"}
-    KeyExchange -->|Generates| SymmetricKey["Shared Symmetric Session Key (Encrypted Channel)"]
+    KeyExchange -->|Generates| SymmetricKey["Shared Symmetric Session Key Encrypted Channel"]
     
-    subgraph AuthPhase["Authentication Phase (Encrypted)"]
+    subgraph AuthPhase ["Authentication Phase Encrypted"]
         Server -->|Sends Challenge encrypted with User Public Key| Client
         Client -->|Decrypts Challenge & Signs with Private Key| Sign["Create Signature"]
         Sign -->|Sends Signature back| Server
         Server -->|Verifies Signature with Authorized Keys| Access{"Access Granted?"}
     end
     
-    SymmetricKey --> AuthPhase
+    SymmetricKey --> Server
     Access -->|Yes| ShellSession["Interactive Remote Shell Established"]
 ```
 

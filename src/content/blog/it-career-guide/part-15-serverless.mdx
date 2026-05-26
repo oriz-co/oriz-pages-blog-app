@@ -56,12 +56,12 @@ While AWS Lambda is highly popular, it suffers from a significant latency bottle
 
 ```mermaid
 graph TD
-    subgraph Container Cold Start (AWS Lambda)
-    bootVM["1. Spin up VM container"] --> bootRuntime["2. Load runtime (Node/Python VM)"]
-    bootRuntime --> runCode["3. Execute code (100ms - 5000ms delay)"]
+    subgraph ColdStart ["Container Cold Start: AWS Lambda"]
+    bootVM["1. Spin up VM container"] --> bootRuntime["2. Load runtime: Node or Python VM"]
+    bootRuntime --> runCode["3. Execute code: 100ms to 5000ms delay"]
     end
-    subgraph V8 Isolate Startup (Cloudflare Workers)
-    loadIsolate["1. Mount V8 Isolate (Shared RAM runtime)"] --> runIsolate["2. Execute JS context (<5ms delay)"]
+    subgraph IsolateStart ["V8 Isolate Startup: Cloudflare Workers"]
+    loadIsolate["1. Mount V8 Isolate: Shared RAM runtime"] --> runIsolate["2. Execute JS context: under 5ms delay"]
     end
 ```
 

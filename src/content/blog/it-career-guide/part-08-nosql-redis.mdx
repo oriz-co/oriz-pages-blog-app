@@ -38,14 +38,14 @@ In relational SQL, normalize-first is the default pattern. In NoSQL, design-for-
 
 ```mermaid
 graph TD
-    subgraph Embedding 1-to-N
-    parentDoc1["User Document (Parent)<br>{ _id: 1, name: 'Chirag' }"]
-    parentDoc1 -->|"Embeds"| addressArray["Addresses: [ { street: 'Main St', city: 'Delhi' } ]"]
+    subgraph Embedding_One_To_Many ["Embedding 1-to-N"]
+    parentDoc1["User Document Parent: ID 1, name Chirag"]
+    parentDoc1 -->|"Embeds"| addressArray["Addresses: street Main St, city Delhi"]
     end
-    subgraph Referencing 1-to-Unbounded
-    parentDoc2["Post Document (Parent)<br>{ _id: 101, title: 'Kafka' }"]
-    commentDoc1["Comment 1<br>{ _id: 1, postId: 101, text: 'Great post!' }"] -->|"References"| parentDoc2
-    commentDoc2["Comment 2<br>{ _id: 2, postId: 101, text: 'Awesome' }"] -->|"References"| parentDoc2
+    subgraph Referencing_One_To_Unbounded ["Referencing 1-to-Unbounded"]
+    parentDoc2["Post Document Parent: ID 101, title Kafka"]
+    commentDoc1["Comment 1: ID 1, postId 101, text Great post"] -->|"References"| parentDoc2
+    commentDoc2["Comment 2: ID 2, postId 101, text Awesome"] -->|"References"| parentDoc2
     end
 ```
 
@@ -64,9 +64,9 @@ Redis is a single-threaded, in-memory key-value data store. Because it runs in m
 
 ```mermaid
 graph LR
-    subgraph Redis Data Structures
-    stringKey["String Key: 'user:session:101'"] ---> stringVal["JSON String: '{ name: \"Chirag\" }'"]
-    zsetKey["Sorted Set: 'api:rate_limit:ip'"] ---> zsetVal["Value: '192.168.1.1' (Score: 1685002930)"]
+    subgraph RedisDataStructures ["Redis Data Structures"]
+    stringKey["String Key: user:session:101"] ---> stringVal["JSON String: name Chirag"]
+    zsetKey["Sorted Set: api:rate_limit:ip"] ---> zsetVal["Value: 192.168.1.1, Score: 1685002930"]
     end
 ```
 
