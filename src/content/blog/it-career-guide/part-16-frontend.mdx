@@ -63,11 +63,11 @@ Next.js solves this using the **App Router** based on **React Server Components 
 
 ```mermaid
 graph TD
-    subgraph Server Runtime (V8 Edge / Node)
-        rsc["React Server Component<br>(Queries DB directly)"] -->|Generates JSON payload| stream["Stream to Client"]
+    subgraph ServerRuntime ["Server Runtime: V8 Edge or Node"]
+        rsc["React Server Component: Queries DB directly"] -->|Generates JSON payload| stream["Stream to Client"]
     end
-    subgraph Client Browser
-        stream -->|Hydrate Interactive Nodes| clientComp["Client Component<br>(Interactive JS)"]
+    subgraph ClientBrowser ["Client Browser"]
+        stream -->|Hydrate Interactive Nodes| clientComp["Client Component: Interactive JS"]
     end
 ```
 

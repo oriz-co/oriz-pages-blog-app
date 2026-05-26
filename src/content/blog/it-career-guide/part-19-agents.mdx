@@ -91,15 +91,15 @@ The **Model Context Protocol (MCP)** is an open standard that acts as a unified 
 
 ```mermaid
 graph LR
-    subgraph Host Application (Cursor / VS Code / Claude Desktop)
+    subgraph HostApp ["Host Application: Cursor or VS Code or Claude Desktop"]
         MCPClient["MCP Client"]
     end
-    subgraph MCP Server (Local Process / Subprocess)
-        MCPServer["MCP Server Interface"] --> Resources["Resources (Local Files / DB)"]
-        MCPServer --> Tools["Tools (File edit / Run tests)"]
-        MCPServer --> Prompts["Prompts (Templates)"]
+    subgraph MCPServerProc ["MCP Server: Local Process or Subprocess"]
+        MCPServer["MCP Server Interface"] --> Resources["Resources: Local Files or DB"]
+        MCPServer --> Tools["Tools: File edit or Run tests"]
+        MCPServer --> Prompts["Prompts: Templates"]
     end
-    MCPClient <-->|JSON-RPC 2.0 over stdio/HTTP| MCPServer
+    MCPClient <-->|JSON-RPC 2.0 over stdio or HTTP| MCPServer
 ```
 
 #### MCP Architecture
