@@ -109,7 +109,7 @@ To demonstrate your polyglot database competency, you must build and commit a **
     - **Step A (Check Cache):** When a request hits, check Redis for the key `reports:sales:summary` using a Redis Hash. If it exists (Cache Hit), return the data immediately in under **2ms**.
     - **Step B (Execute DB Aggregate):** If the key does not exist (Cache Miss), execute a heavy, multi-stage **MongoDB Aggregation query** (`$match` by year, `$group` by category, `$sort` by volume).
     - **Step C (Hydrate Cache):** Store the aggregated result string into Redis, configuring a strict **60-second TTL (Time to Live)** to prevent memory bloat, and return the result to the user.
-4.  **Diagnostic Benchmarking:** Write a benchmarking script that executes 100 sequential requests, logs the latency of each request, and outputs a chart in your `README.md` comparing Cache Hit latency ($<2$ms) vs Cache Miss database read latency ($>120$ms).
+4.  **Diagnostic Benchmarking:** Write a benchmarking script that executes 100 sequential requests, logs the latency of each request, and outputs a chart in your `README.md` comparing Cache Hit latency (`< 2 ms`) vs Cache Miss database read latency (`> 120 ms`).
 
 ---
 
