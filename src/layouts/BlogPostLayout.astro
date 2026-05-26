@@ -270,4 +270,57 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("en-US", {
       </div>
     </div>
   </article>
+
+  <!-- Client-side Mermaid diagrams rendering script -->
+  <script is:inline>
+    (function() {
+      // Find all potential Astro-wrapped Mermaid code blocks
+      const blocks = document.querySelectorAll('pre code.language-mermaid, pre[data-language="mermaid"], .language-mermaid');
+      
+      if (blocks.length > 0) {
+        // Dynamically import the Mermaid ESM library from CDN
+        import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs')
+          .then(({ default: mermaid }) => {
+            mermaid.initialize({
+              startOnLoad: false,
+              theme: 'dark',
+              securityLevel: 'loose',
+              themeVariables: {
+                background: 'transparent',
+                primaryColor: '#a855f7',
+                primaryTextColor: '#f8f9fa',
+                lineColor: '#6b7280',
+              }
+            });
+
+            blocks.forEach((block, idx) => {
+              const pre = block.tagName === 'CODE' ? block.parentElement : block;
+              
+              if (pre.dataset.mermaidProcessed) return;
+              pre.dataset.mermaidProcessed = 'true';
+
+              const codeText = block.textContent;
+
+              const container = document.createElement('div');
+              container.className = 'mermaid';
+              container.id = `mermaid-diagram-${idx}`;
+              container.style.display = 'flex';
+              container.style.justifyContent = 'center';
+              container.style.margin = '2.5rem 0';
+              container.style.background = 'rgba(15, 10, 25, 0.4)';
+              container.style.padding = '1.5rem';
+              container.style.borderRadius = '1rem';
+              container.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+              container.style.overflowX = 'auto';
+              container.textContent = codeText;
+
+              pre.parentNode.replaceChild(container, pre);
+            });
+
+            mermaid.run();
+          })
+          .catch(err => console.error('Failed to load Mermaid CDN:', err));
+      }
+    })();
+  </script>
 </BaseLayout>
