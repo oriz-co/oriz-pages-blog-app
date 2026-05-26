@@ -54,8 +54,12 @@ if (seriesSlug) {
     (p) => p.id === seriesSlug || p.id.startsWith(`${seriesSlug}/`)
   );
   
-  const indexPost = seriesPosts.find((p) => p.id === seriesSlug);
-  const parts = seriesPosts.filter((p) => p.id !== seriesSlug);
+  const indexPost = seriesPosts.find(
+    (p) => p.id === seriesSlug || p.id === `${seriesSlug}/index`
+  );
+  const parts = seriesPosts.filter(
+    (p) => p.id !== (indexPost ? indexPost.id : seriesSlug)
+  );
   
   isSeries = parts.length > 0;
   
@@ -91,7 +95,9 @@ if (seriesSlug) {
     const representative = indexPost ?? sortedSeriesParts[0];
     seriesTitle = representative?.data.series || indexPost?.data.title || "Blog Series";
     
-    currentItemIndex = seriesNavigationList.findIndex((p) => p.id === slug);
+    currentItemIndex = seriesNavigationList.findIndex(
+      (p) => p.id === slug || (p.isIndex && (slug === seriesSlug || slug === `${seriesSlug}/index`))
+    );
     currentPartIndex = sortedSeriesParts.findIndex((p) => p.id === slug);
     
     prevPost = currentItemIndex > 0 ? seriesNavigationList[currentItemIndex - 1] : null;
@@ -201,7 +207,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("en-US", {
                 </summary>
                 <ol class="mt-3 space-y-2 border-t border-border/50 pt-3 text-sm">
                   {seriesNavigationList.map((item, index) => {
-                    const isCurrent = item.id === slug;
+                    const isCurrent = item.id === slug || (item.isIndex && (slug === seriesSlug || slug === `${seriesSlug}/index`));
                     return (
                       <li class="flex items-center gap-2">
                         <span class={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isCurrent ? 'bg-accent/20 text-accent-light' : 'bg-bg-tertiary text-text-tertiary'}`}>
@@ -212,7 +218,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("en-US", {
                             {item.isIndex ? "Introduction & Master Index" : item.data.title} <span class="text-xs text-accent-light font-normal">(You are here)</span>
                           </span>
                         ) : (
-                          <a href={`/blog/${item.id}`} class="text-text-secondary hover:text-accent-light hover:underline flex-1 transition-colors">
+                          <a href={item.isIndex ? `/blog/${seriesSlug}` : `/blog/${item.id}`} class="text-text-secondary hover:text-accent-light hover:underline flex-1 transition-colors">
                             {item.isIndex ? "Introduction & Master Index" : item.data.title}
                           </a>
                         )}
@@ -233,8 +239,8 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("en-US", {
           isSeries && (prevPost || nextPost) && (
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12 mb-8">
               {prevPost ? (
-                <a href={`/blog/${prevPost.id}`} class="glass-card p-4 rounded-xl border border-border flex flex-col items-start gap-1 group hover:-translate-y-0.5 transition-all">
-                  <span class="text-xs text-text-tertiary font-medium">← Previous Part</span>
+                <a href={prevPost.isIndex ? `/blog/${seriesSlug}` : `/blog/${prevPost.id}`} class="glass-card p-4 rounded-xl border border-border flex flex-col items-start gap-1 group hover:-translate-y-0.5 transition-all">
+                  <span class="text-xs text-text-tertiary font-medium font-semibold">← Previous Part</span>
                   <span class="text-sm font-semibold text-text-primary group-hover:text-accent-light line-clamp-1 transition-colors">
                     {prevPost.isIndex ? "Introduction & Master Index" : prevPost.data.title}
                   </span>
@@ -244,7 +250,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString("en-US", {
               )}
               
               {nextPost ? (
-                <a href={`/blog/${nextPost.id}`} class="glass-card p-4 rounded-xl border border-border flex flex-col items-end gap-1 group hover:-translate-y-0.5 transition-all text-right">
+                <a href={nextPost.isIndex ? `/blog/${seriesSlug}` : `/blog/${nextPost.id}`} class="glass-card p-4 rounded-xl border border-border flex flex-col items-end gap-1 group hover:-translate-y-0.5 transition-all text-right">
                   <span class="text-xs text-text-tertiary font-medium font-semibold">Next Part →</span>
                   <span class="text-sm font-semibold text-text-primary group-hover:text-accent-light line-clamp-1 transition-colors">
                     {nextPost.isIndex ? "Introduction & Master Index" : nextPost.data.title}
