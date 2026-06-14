@@ -11,3 +11,7 @@ Thumbs.db
 .flaskenv*
 !.env.project
 !.env.vault
+
+# Playwright
+playwright-report/
+test-results/
