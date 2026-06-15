@@ -30,11 +30,13 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: "pnpm run build && pnpm run preview",
-    port: 4321,
-    cwd: ".",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+  webServer: process.env.CI
+    ? {
+        command: "pnpm run build && pnpm run preview --port 4321",
+        port: 4321,
+        cwd: ".",
+        reuseExistingServer: true,
+        timeout: 120000,
+      }
+    : undefined,
 });
