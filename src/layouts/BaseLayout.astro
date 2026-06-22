@@ -12,8 +12,8 @@
 import '~/styles/global.css'
 import '~/styles/oriz-ui-overrides.css'
 import 'katex/dist/katex.min.css'
-import Header from '@chirag127/astro-chrome/Header.astro'
-import Footer from '@chirag127/astro-chrome/Footer.astro'
+import Layout from '@chirag127/astro-chrome/Layout.astro'
+import HeaderControls from '~/components/HeaderControls'
 import FeedDiscovery from '~/components/FeedDiscovery.astro'
 import { ClientRouter } from 'astro:transitions'
 
@@ -48,6 +48,12 @@ const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
 const ga4Id = import.meta.env.PUBLIC_GA4_ID
 
 const ogImage = image ? new URL(image, 'https://blog.oriz.in').toString() : undefined
+const bottomBarActions = [
+  { icon: '⌂', label: 'Home', href: 'https://oriz.in/' },
+  { icon: '✎', label: 'Blog', href: '/' },
+  { icon: '⚒', label: 'Tools', href: 'https://oriz.in/tools/' },
+  { icon: 'ℹ', label: 'About', href: '/about/' },
+]
 import '@chirag127/astro-shell/tokens.css'
 ---
 
@@ -132,9 +138,10 @@ import '@chirag127/astro-shell/tokens.css'
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
-    <Header />
-    <main id="main"><slot /></main>
-    <Footer />
+    <Layout bottomBarActions={bottomBarActions}>
+      <HeaderControls client:idle slot="header-actions" />
+      <slot />
+    </Layout>
 
     <script>
       if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
