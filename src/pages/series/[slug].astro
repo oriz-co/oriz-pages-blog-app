@@ -15,14 +15,14 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
  * Each alias re-emits the same props as the canonical slug; both URLs
  * render identical pages so old links don't break.
  */
-const SERIES_ALIASES: Record<string, string> = {
-  'degrees-while-working-india': 'degrees-while-working',
-  'wsl-free-windows-home-server': 'windows-native-home-server',
-  'the-2026-it-career-blueprint': 'it-career-guide',
-  'puri-travel-guide-from-bhubaneswar': 'puri-travel-guide-bhubaneswar',
-}
-
 export async function getStaticPaths() {
+  const SERIES_ALIASES: Record<string, string> = {
+    'degrees-while-working-india': 'degrees-while-working',
+    'wsl-free-windows-home-server': 'windows-native-home-server',
+    'the-2026-it-career-blueprint': 'it-career-guide',
+    'puri-travel-guide-from-bhubaneswar': 'puri-travel-guide-bhubaneswar',
+  }
+
   const allPosts = await getCollection('blog', ({ data }) => !data.draft)
   const folderMap = new Map<string, typeof allPosts>()
 
