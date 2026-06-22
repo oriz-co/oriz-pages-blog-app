@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import mdx from '@astrojs/mdx'
-import { unified } from '@astrojs/markdown-remark'
 import expressiveCode from 'astro-expressive-code'
 import pagefind from 'astro-pagefind'
 import tailwindcss from '@tailwindcss/vite'
@@ -65,22 +64,19 @@ export default defineConfig({
     pagefind(),
   ],
   markdown: {
-    // Astro 6.4+ unified() processor API. The legacy top-level
-    // `remarkPlugins` / `rehypePlugins` / `remarkRehype` keys are deprecated
-    // (will be removed in Astro 8) — wrap them in `processor: unified({...})`
-    // imported from `@astrojs/markdown-remark`.
+    // ponytail: top-level remark/rehype keys work on installed astro 6.4.7
+    // (its bundled @astrojs/markdown-remark 6.3.11 does not export `unified`).
+    // Switch back to `processor: unified({...})` once astro upgrades the
+    // bundled markdown-remark to >=7.x.
     //
     // KaTeX `strict: 'ignore'` silences the "No character metrics for '❌'/'✅'"
     // warnings emitted when emoji land inside accidental `$...$` math spans
-    // (e.g. money tables like `$3.99–$19.99`). `strict: false` is treated as
-    // "warn" by KaTeX; `'ignore'` is the actual silencer.
-    processor: unified({
-      remarkPlugins: [remarkMath],
-      rehypePlugins: [
-        rehypeSlug,
-        [rehypeKatex, { strict: 'ignore', output: 'htmlAndMathml' }],
-      ],
-    }),
+    // (e.g. money tables like `$3.99–$19.99`).
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeKatex, { strict: 'ignore', output: 'htmlAndMathml' }],
+    ],
     shikiConfig: { theme: 'github-dark-dimmed' },
   },
   vite: {
